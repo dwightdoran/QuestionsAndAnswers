@@ -1,0 +1,19 @@
+{
+  "name": "questionsandanswers",
+  "version": "1.0.0",
+  "description": "api for Q&A service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rpp32-sdc-peat/QuestionsAndAnswers.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rpp32-sdc-peat/QuestionsAndAnswers/issues"
+  },
+  "homepage": "https://github.com/rpp32-sdc-peat/QuestionsAndAnswers#readme"
+}
