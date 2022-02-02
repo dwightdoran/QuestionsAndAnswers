@@ -1,8 +1,8 @@
 -- set up schema
 
-CREATE DATABASE questionsAndAnswers;
+-- CREATE DATABASE questions_and_answers;
 
-USE questionsAndAnswers;
+USE questions_and_answers;
 
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS questions;
@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS photos;
 
 CREATE TABLE products (
   id BIGSERIAL PRIMARY KEY
-)
+);
 
 CREATE TABLE questions (
   id BIGSERIAL PRIMARY KEY,
@@ -22,7 +22,7 @@ CREATE TABLE questions (
   asker_email VARCHAR(100),
   reported BOOLEAN,
   helpfulness INTEGER
-)
+);
 
 CREATE TABLE answers (
   id BIGSERIAL PRIMARY KEY,
@@ -33,11 +33,10 @@ CREATE TABLE answers (
   answerer_email VARCHAR(100),
   reported BOOLEAN,
   helpfulness INTEGER
-)
+);
 
 CREATE TABLE photos (
   id BIGSERIAL PRIMARY KEY,
   answer_id BIGINT REFERENCES answers(id),
   url TEXT
-)
--- researching foreign keys and schema design first
+);
