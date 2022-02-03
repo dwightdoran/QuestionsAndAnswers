@@ -9,33 +9,41 @@ DROP TABLE IF EXISTS answers;
 DROP TABLE IF EXISTS photos;
 
 CREATE TABLE questions (
-  id BIGSERIAL PRIMARY KEY,
+  questions_id BIGSERIAL PRIMARY KEY,
   product_id BIGINT,
-  body VARCHAR(255),
-  date_written TEXT,
+  question_body VARCHAR(255),
+  question_date_written TEXT,
   asker_name VARCHAR(100),
   asker_email VARCHAR(100),
-  reported BOOLEAN,
-  helpfulness INTEGER
+  question_reported BOOLEAN,
+  question_helpfulness INTEGER
 );
 
 CREATE TABLE answers (
-  id BIGSERIAL PRIMARY KEY,
-  question_id BIGINT REFERENCES questions(id),
-  body VARCHAR(255),
+  answers_id BIGSERIAL PRIMARY KEY,
+  question_id BIGINT REFERENCES questions(questions_id),
+  answer_body VARCHAR(255),
   date_written TEXT,
   answerer_name VARCHAR(100),
   answerer_email VARCHAR(100),
-  reported BOOLEAN,
-  helpfulness INTEGER
+  answer_reported BOOLEAN,
+  answer_helpfulness INTEGER
 );
 
 CREATE TABLE photos (
-  id BIGSERIAL PRIMARY KEY,
-  answer_id BIGINT REFERENCES answers(id),
+  photos_id BIGSERIAL PRIMARY KEY,
+  answer_id BIGINT REFERENCES answers(answers_id),
   url TEXT
 );
 
-\copy questions FROM 'data/questions.csv' WITH (format csv, header);
-\copy answers FROM 'data/answers.csv' WITH (format csv, header);
-\copy photos FROM 'data/answers_photos.csv' WITH (format csv, header);
+\copy questions FROM 'data/questions.csv' DELIMITER ',' CSV HEADER;
+\copy answers FROM 'data/answers.csv' DELIMITER ',' CSV HEADER;
+\copy photos FROM 'data/answers_photos.csv' DELIMITER ',' CSV HEADER;
+
+SELECT questions_id, question_body, question_date_written,
+asker_name, question_reported, question_helpfulness,
+answers_id, answer_body, date_written, answerer_name, answer_reported,
+answer_helpfulness
+FROM questions, answers
+WHERE questions.questions_id = answers.question_id
+AND product_id = 15;
