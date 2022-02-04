@@ -40,10 +40,12 @@ CREATE TABLE photos (
 \copy answers FROM 'data/answers.csv' DELIMITER ',' CSV HEADER;
 \copy photos FROM 'data/answers_photos.csv' DELIMITER ',' CSV HEADER;
 
-SELECT questions_id, question_body, question_date_written,
-asker_name, question_reported, question_helpfulness,
-answers_id, answer_body, date_written, answerer_name, answer_reported,
-answer_helpfulness
-FROM questions, answers
-WHERE questions.questions_id = answers.question_id
-AND product_id = 15;
+-- SELECT questions_id, question_body, question_date_written,
+-- asker_name, question_reported, question_helpfulness,
+-- answers_id, answer_body, date_written, answerer_name, answer_reported,
+-- answer_helpfulness
+-- FROM questions, answers
+-- WHERE questions.questions_id = answers.question_id
+-- AND product_id = 15;
+
+-- CREATE INDEX idx_question_id ON questions(questions_id) AND answers(question_id)
