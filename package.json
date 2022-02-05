@@ -4,7 +4,7 @@
   "description": "api for Q&A service",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/rpp32-sdc-peat/QuestionsAndAnswers/issues"
   },
-  "homepage": "https://github.com/rpp32-sdc-peat/QuestionsAndAnswers#readme"
+  "homepage": "https://github.com/rpp32-sdc-peat/QuestionsAndAnswers#readme",
+  "devDependencies": {
+    "express": "^4.17.2",
+    "jest": "^27.5.0",
+    "supertest": "^6.2.2"
+  }
 }
