@@ -4,7 +4,8 @@
   "description": "api for Q&A service",
   "main": "index.js",
   "scripts": {
-    "test": "npx jest"
+    "test": "npx jest",
+    "start": "nodemon server/server.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "express": "^4.17.2",
     "jest": "^27.5.0",
+    "nodemon": "^2.0.15",
     "supertest": "^6.2.2"
   }
 }
