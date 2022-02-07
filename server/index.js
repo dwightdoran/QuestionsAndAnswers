@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json())
 
 app.get('/', async (req, res) => {
-  res.sendStatus(200)
+  res.status(200).json({});
   return;
 })
 
