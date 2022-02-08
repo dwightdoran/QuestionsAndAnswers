@@ -1,12 +1,31 @@
+// import questions model functions
+const { questionsModels } = require('../models/questions.js')
+
 exports.questions = {
 
   getQuestions: (req, res) => {
-    res.status(200).json({success: true, successMsg: 'Grabbed questions'})
+    // 10 is arbitrary for a product_id which is needed to get the correct questions
+    // get this number from the front end
+    questionsModels.getQuestions([10], (err, result) => {
+      err ? console.log('error grabbing data from db ',err) :
+        res.status(200).json({
+          success: true,
+          successMsg: 'Grabbed questions',
+          data: result
+        })
+    });
     return;
   },
 
   createQuestion: (req, res) => {
-    res.status(200).json({success: true, successMsg: 'Posted question to database'})
+    // returns the newly created question? or list of all questions?
+    questionsModels.createQuestion([], (err, result) => {
+      err ? console.log('error grabbing data from db ',err) :
+        res.status(200).json({
+          success: true,
+          successMsg: 'Posted question to database'
+        })
+    })
     return;
   },
 

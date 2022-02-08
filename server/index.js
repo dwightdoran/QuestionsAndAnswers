@@ -18,6 +18,6 @@ No tests fail because of this (so far)
 Jest has detected the following 1 open handle potentially keeping Jest from exiting:
   ●  TCPWRAP
 */
-pool.connect();
+// pool.connect();
 
 module.exports = app;
