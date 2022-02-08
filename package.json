@@ -4,7 +4,7 @@
   "description": "api for Q&A service",
   "main": "index.js",
   "scripts": {
-    "test": "npx jest",
+    "test": "npx jest --detectOpenHandles",
     "start": "nodemon server/server.js"
   },
   "repository": {
