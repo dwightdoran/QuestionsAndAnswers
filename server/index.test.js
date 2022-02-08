@@ -1,6 +1,9 @@
 const request = require('supertest');
 const app = require('./index.js');
 
+const question_id = 10;
+const answer_id = 50;
+
 describe('tests', () => {
 
   describe('should connect', () => {
@@ -16,72 +19,141 @@ describe('tests', () => {
     })
   })
 
+  // ============== GET routes ================== //
   describe('GET /qa/questions route', () => {
+
     test('responds with a status code of 200', async () => {
       const response = await request(app)
       .get('/qa/questions')
       expect(response.statusCode).toBe(200);
     })
+
     test('responds with json data type', async () => {
       const response = await request(app)
       .get('/qa/questions')
       expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
     })
+
   })
 
   describe('GET /qa/questions/:question_id/answers route', () => {
+
     test('responds with a status code of 200', async () => {
       const response = await request(app)
-      .get('/qa/questions/:question_id/answers')
+      .get(`/qa/questions/${question_id}/answers`)
       expect(response.statusCode).toBe(200);
     })
+
     test('responds with json data type', async () => {
       const response = await request(app)
       .get('/qa/questions/:question_id/answers')
       expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
     })
+
   })
 
-  xdescribe('POST /qa/questions route', () => {
+  // ============== POST routes ================== //
+  describe('POST /qa/questions route', () => {
+
     test('responds with a status code of 200', async () => {
+      const response = await request(app)
+      .post('/qa/questions')
+      expect(response.statusCode).toBe(200)
     })
+
     test('responds with json data type', async () => {
+      const response = await request(app)
+      .post('/qa/questions')
+      expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
+    })
+
+  })
+
+  describe('POST /qa/questions/:question_id/answers route', () => {
+
+    test('responds with a status code of 200', async () => {
+      const response = await request(app)
+      .post('/qa/questions/${question_id}/answers')
+      expect(response.statusCode).toBe(200)
+    })
+
+    test('responds with json data type', async () => {
+      const response = await request(app)
+      .post(`/qa/questions/${question_id}/answers`)
+      expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
+    })
+
+  })
+
+  // ============== PUT routes ================== //
+  describe('PUT /qa/questions/:question_id/helpful', () => {
+    test('responds with a status code of 200', async () => {
+      const response = await request(app)
+      .put(`/qa/questions/${question_id}/helpful`)
+      expect(response.statusCode).toBe(200)
+    })
+    test('responds with json object', async () => {
+      const response = await request(app)
+      .put(`/qa/questions/${question_id}/helpful`)
+      expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
+    })
+    test('responds with helpful message on question', async () => {
+      const response = await request(app)
+      .put(`/qa/questions/${question_id}/helpful`)
+      expect(response.body.helpful).toEqual('question marked as helpful')
+    })
+  })
+  describe('PUT /qa/questions/:question_id/report', () => {
+    test('responds with a status code of 200', async () => {
+      const response = await request(app)
+      .put(`/qa/questions/${question_id}/report`)
+      expect(response.statusCode).toBe(200)
+    })
+    test('responds with json object', async () => {
+      const response = await request(app)
+      .put(`/qa/questions/${question_id}/report`)
+      expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
+    })
+    test('responds with reported message on question', async () => {
+      const response = await request(app)
+      .put(`/qa/questions/${question_id}/report`)
+      expect(response.body.reported).toEqual('question marked as reported')
     })
   })
 
-
-  xdescribe('POST /qa/questions/:question_id/answers route', () => {
+  describe('PUT /qa/answers/:answer_id/helpful', () => {
     test('responds with a status code of 200', async () => {
+      const response = await request(app)
+      .put(`/qa/answers/${answer_id}/helpful`)
+      expect(response.statusCode).toBe(200)
     })
-    test('responds with json data type', async () => {
+    test('responds with json object', async () => {
+      const response = await request(app)
+      .put(`/qa/answers/${answer_id}/helpful`)
+      expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
+    })
+    test('responds with helpful message on answer', async () => {
+      const response = await request(app)
+      .put(`/qa/answers/${question_id}/helpful`)
+      expect(response.body.helpful).toEqual('answer marked as helpful')
     })
   })
 
-  xdescribe('PUT /qa/questions/:question_id/helpful', () => {
+  describe('PUT /qa/answers/:answer_id/report', () => {
     test('responds with a status code of 200', async () => {
+      const response = await request(app)
+      .put(`/qa/answers/${answer_id}/report`)
+      expect(response.statusCode).toBe(200)
     })
-    test('responds with json data type', async () => {
+    test('responds with json object', async () => {
+      const response = await request(app)
+      .put(`/qa/answers/${answer_id}/report`)
+      expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
     })
-  })
-
-  xdescribe('PUT /qa/questions/:question_id/report', () => {
-    test('responds with a status code of 200', async () => {
-    })
-    test('responds with json data type', async () => {
-    })
-  })
-
-  xdescribe('PUT /qa/answers/:answer_id/helpful', () => {
-    test('responds with a status code of 200', async () => {
-    })
-    test('responds with json data type', async () => {
-    })
-  })
-
-  xdescribe('PUT /qa/answers/:answer_id/report', () => {
-    test('responds with a status code of 200', async () => {
-    })
-    test('responds with json data type', async () => {
+    test('responds with report message on answer', async () => {
+      const response = await request(app)
+      .put(`/qa/answers/${answer_id}/report`)
+      expect(response.body.reported).toEqual('answer marked as reported')
     })
   })
 })
