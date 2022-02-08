@@ -52,12 +52,3 @@ CREATE INDEX idx_product_id ON questions(product_id);
 
 ALTER TABLE questions DROP COLUMN question_epoch;
 ALTER TABLE answers DROP COLUMN answer_epoch;
-
--- change query to answer_date_written
--- SELECT questions_id, question_body, question_date_written,
--- asker_name, question_reported, question_helpfulness,
--- answers_id, answer_body, answer_date_written, answerer_name, answer_reported,
--- answer_helpfulness
--- FROM questions, answers
--- WHERE questions.questions_id = answers.question_id
--- AND product_id = 150000;

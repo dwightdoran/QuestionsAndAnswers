@@ -1,4 +1,4 @@
 const app = require('./index.js');
-// const port = 8080;
+const port = process.env.Server_Port || 3000;
 
-app.listen(8080, () => console.log(`listening on port 8080`));
+app.listen(port, () => console.log(`listening on port ${port}`));
