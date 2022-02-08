@@ -12,7 +12,6 @@ CREATE TABLE questions (
   questions_id BIGSERIAL PRIMARY KEY,
   product_id BIGINT,
   question_body VARCHAR(255),
-  -- 1 changed name
   question_epoch BIGINT,
   asker_name VARCHAR(100),
   asker_email VARCHAR(100),
@@ -24,7 +23,6 @@ CREATE TABLE answers (
   answers_id BIGSERIAL PRIMARY KEY,
   question_id BIGINT REFERENCES questions(questions_id),
   answer_body VARCHAR(255),
-  -- 1 changed name
   answer_epoch BIGINT,
   answerer_name VARCHAR(100),
   answerer_email VARCHAR(100),
@@ -42,11 +40,9 @@ CREATE TABLE photos (
 \copy answers FROM 'data/answers.csv' DELIMITER ',' CSV HEADER;
 \copy photos FROM 'data/answers_photos.csv' DELIMITER ',' CSV HEADER;
 
--- 2
 ALTER TABLE questions ADD question_date_written TIMESTAMP;
 ALTER TABLE answers ADD answer_date_written TIMESTAMP;
 
--- 3
 UPDATE questions SET question_date_written = to_timestamp(floor(question_epoch/1000));
 UPDATE answers SET answer_date_written = to_timestamp(floor(answer_epoch/1000));
 
@@ -54,7 +50,6 @@ CREATE INDEX idx_question_id ON questions(questions_id);
 CREATE INDEX idx_question_id_answers ON answers(question_id);
 CREATE INDEX idx_product_id ON questions(product_id);
 
--- 4
 ALTER TABLE questions DROP COLUMN question_epoch;
 ALTER TABLE answers DROP COLUMN answer_epoch;
 
