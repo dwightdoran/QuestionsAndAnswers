@@ -33,7 +33,7 @@ CREATE TABLE answers (
 CREATE TABLE photos (
   photos_id BIGSERIAL PRIMARY KEY,
   answer_id BIGINT REFERENCES answers(answers_id),
-  url TEXT
+  photos_url TEXT
 );
 
 \copy questions FROM 'data/questions.csv' DELIMITER ',' CSV HEADER;
@@ -49,6 +49,7 @@ UPDATE answers SET answer_date_written = to_timestamp(floor(answer_epoch/1000));
 CREATE INDEX idx_question_id ON questions(questions_id);
 CREATE INDEX idx_question_id_answers ON answers(question_id);
 CREATE INDEX idx_product_id ON questions(product_id);
+CREATE INDEX idx_photos_id ON photos(answer_id);
 
 ALTER TABLE questions DROP COLUMN question_epoch;
 ALTER TABLE answers DROP COLUMN answer_epoch;

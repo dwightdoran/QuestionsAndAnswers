@@ -1,6 +1,15 @@
+const { answersModels } = require('../models/answers.js')
+
 exports.answers = {
   getAnswers : (req, res) => {
-    res.status(200).json({success: true, successMsg: `Grabbed answers for question ${req.params.question_id}`});
+    answersModels.getAnswers(263761, (err, result) => {
+      err ? console.log('error grabbing data from db ',err) :
+      res.status(200).json({
+        success: true,
+        successMsg: `Grabbed answers for question ${req.params.question_id}`,
+        data: result
+      });
+    })
     return;
   },
 

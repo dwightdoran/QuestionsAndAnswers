@@ -5,7 +5,7 @@ exports.questions = {
   getQuestions: (req, res) => {
     // 10 is arbitrary for a product_id which is needed to get the correct questions
     // get this number from the front end
-    questionsModels.getQuestions([10], (err, result) => {
+    questionsModels.getQuestions(64620, (err, result) => {
       err ? console.log('error grabbing data from db ',err) :
         res.status(200).json({
           success: true,
