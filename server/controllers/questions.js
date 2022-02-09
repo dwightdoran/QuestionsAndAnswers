@@ -2,7 +2,6 @@
 const { questionsModels } = require('../models/questions.js')
 
 exports.questions = {
-
   getQuestions: (req, res) => {
     // 10 is arbitrary for a product_id which is needed to get the correct questions
     // get this number from the front end
