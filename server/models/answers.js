@@ -18,7 +18,7 @@ exports.answersModels = {
       client.query(queryString, (err, result) => {
         return err ?
         console.error('Error executing query', err.stack) :
-        (console.log(result.rows), cb(null, result.rows));
+        cb(null, result.rows);
       })
     })
   },

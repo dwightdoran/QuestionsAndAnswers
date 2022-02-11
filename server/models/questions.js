@@ -14,16 +14,20 @@ exports.questionsModels = {
     ON q.questions_id = a.question_id
     FULL JOIN photos AS p
     ON p.answer_id = a.answers_id
-    WHERE product_id = 64620
+    WHERE product_id = ${params}
     ORDER BY question_id`;
     pool.connect((err, client, release) => {
-      return err ?
-      console.error('Error acquiring client', err.stack) :
-      client.query(queryString, (err, result) => {
-        return err ?
-        console.error('Error executing query', err.stack) :
-        cb(null, result.rows);
-      })
+      if (err) {
+        console.error('Error acquiring client', err.stack)
+      } else {
+        fetchQuestions = async () => {
+          await client.query(queryString, (err, result) => {
+          return err ?
+          console.error('Error executing query', err.stack) :
+          (cb(null, result.rows));
+        })}
+      }
+      fetchQuestions();
     })
   },
 

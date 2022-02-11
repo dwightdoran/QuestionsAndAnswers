@@ -3,15 +3,17 @@ const { questionsModels } = require('../models/questions.js')
 
 exports.questions = {
   getQuestions: (req, res) => {
-    // 10 is arbitrary for a product_id which is needed to get the correct questions
-    // get this number from the front end
-    questionsModels.getQuestions(64620, (err, result) => {
+    let product_id = Number(req.query.product_id) || 64620;
+    // console.log(product_id)
+    const questionData = {};
+    questionsModels.getQuestions(product_id, (err, result) => {
       err ? console.log('error grabbing data from db ',err) :
-        res.status(200).json({
-          success: true,
-          successMsg: 'Grabbed questions',
-          data: result
-        })
+      res.status(200).send({
+        success: true,
+        successMsg: 'Grabbed questions',
+        data: transformQuestions(result, product_id)
+      })
+
     });
     return;
   },
@@ -38,3 +40,14 @@ exports.questions = {
     return;
   }
 }
+
+const transformQuestions = (questionsArray, product_id) => {
+  // console.log(questionsArray)
+  let resultQuestions = {
+    product_id: product_id || 64620,
+    results: questionsArray
+  };
+
+  return resultQuestions;
+}
+
