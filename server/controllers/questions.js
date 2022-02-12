@@ -4,8 +4,6 @@ const { questionsModels } = require('../models/questions.js')
 exports.questions = {
   getQuestions: (req, res) => {
     let product_id = Number(req.query.product_id) || 64620;
-    // console.log(product_id)
-    const questionData = {};
     questionsModels.getQuestions(product_id, (err, result) => {
       err ? console.log('error grabbing data from db ',err) :
       res.status(200).send({

@@ -10,7 +10,7 @@ exports.answersModels = {
     FROM answers AS a
     FULL JOIN photos AS p
     ON p.answer_id = a.answers_id
-    WHERE question_id = 26361
+    WHERE question_id = ${params}
     ORDER BY answer_id`;
     pool.connect((err, client, release) => {
       return err ?
