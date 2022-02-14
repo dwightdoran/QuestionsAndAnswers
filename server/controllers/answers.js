@@ -17,7 +17,7 @@ exports.answers = {
   createAnswer : (req, res) => {
     const { body, name, email, photos, date_written } = req.body;
     const question_id = Number(req.params.question_id);
-    answersModels.createAnswer([question_id, name, email, body, date_written], (err, result) => {
+    answersModels.createAnswer([question_id, name, email, body, date_written, photos], (err, result) => {
       err ? console.log('error grabbing data from db ',err) :
         res.status(200).json({
           success: true,
