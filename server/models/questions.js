@@ -2,7 +2,6 @@
 const { pool } = require('../../db/connection.js')
 
 exports.questionsModels = {
-  // 1. pass the product_id from front end
   getQuestions: (params, cb) => {
     const queryString =
     `SELECT
@@ -33,7 +32,10 @@ exports.questionsModels = {
 
   createQuestion: (params, cb) => {
     // what is required data for creating a question?
-    const queryString = `SELECT question_body FROM questions WHERE questions.questions_id = 15`;
+    // console.log(params)
+    const queryString = `INSERT INTO questions
+    (product_id, asker_name, asker_email, question_body, question_date_written)
+    VALUES (${params[0]}, '${params[1]}', '${params[2]}', '${params[3]}', '${params[4]}')`;
     pool.connect((err, client, release) => {
       if (err) {
         return console.error('Error acquiring client', err.stack)
@@ -56,3 +58,7 @@ exports.questionsModels = {
     // Update reported column
   }
 }
+
+// INSERT INTO questions (product_id, asker_name, asker_email, question_body)
+// VALUES (1000011, 'dwight', 'dwight@gmail.com', 'did this work');
+

@@ -2,8 +2,8 @@ const { answersModels } = require('../models/answers.js')
 
 exports.answers = {
   getAnswers : (req, res) => {
-    let product_id = Number(req.query.product_id) || 263761;
-    answersModels.getAnswers(product_id, (err, result) => {
+    let question_id = Number(req.params.question_id) || 263761;
+    answersModels.getAnswers(question_id, (err, result) => {
       err ? console.log('error grabbing data from db ',err) :
       res.status(200).json({
         success: true,
