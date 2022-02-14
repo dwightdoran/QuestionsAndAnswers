@@ -31,22 +31,21 @@ exports.questionsModels = {
   },
 
   createQuestion: (params, cb) => {
-    // what is required data for creating a question?
-    // console.log(params)
     const queryString = `INSERT INTO questions
     (product_id, asker_name, asker_email, question_body, question_date_written)
     VALUES (${params[0]}, '${params[1]}', '${params[2]}', '${params[3]}', '${params[4]}')`;
     pool.connect((err, client, release) => {
       if (err) {
-        return console.error('Error acquiring client', err.stack)
+        console.error('Error acquiring client', err.stack)
+      } else {
+        addQuestion = async () => {
+          await client.query(queryString, (err, result) => {
+          return err ?
+          console.error('Error executing query', err.stack) :
+          cb(null, result.rows);
+        })}
       }
-      client.query(queryString, (err, result) => {
-        release()
-        if (err) {
-          return console.error('Error executing query', err.stack)
-        }
-        cb(null, result.rows);
-      })
+      addQuestion();
     })
   },
 

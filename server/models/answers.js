@@ -13,17 +13,38 @@ exports.answersModels = {
     WHERE question_id = ${params}
     ORDER BY answer_id`;
     pool.connect((err, client, release) => {
-      return err ?
-      console.error('Error acquiring client', err.stack) :
-      client.query(queryString, (err, result) => {
-        return err ?
-        console.error('Error executing query', err.stack) :
-        cb(null, result.rows);
-      })
+      if (err) {
+        console.error('Error acquiring client', err.stack)
+      } else {
+        grabAnswers = async () => {
+          await client.query(queryString, (err, result) => {
+          return err ?
+          cb(err, null) :
+          cb(null, result.rows);
+        })}
+      }
+      grabAnswers();
     })
   },
 
-  createAnswer: () => {
+  createAnswer: (params, cb) => {
+    const queryString = `INSERT INTO answers
+    (question_id, answerer_name, answerer_email, answer_body, answer_date_written)
+    VALUES (${params[0]}, '${params[1]}', '${params[2]}', '${params[3]}', '${params[4]}')`;
+
+    pool.connect((err, client, release) => {
+      if (err) {
+        console.error('Error acquiring client', err.stack)
+      } else {
+        addAnswer = async () => {
+          await client.query(queryString, (err, result) => {
+          return err ?
+          cb(err, null) :
+          cb(null, result.rows);
+        })}
+      }
+      addAnswer();
+    })
   },
 
   markAnswerHelpful: () => {

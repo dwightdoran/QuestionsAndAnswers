@@ -15,7 +15,15 @@ exports.answers = {
   },
 
   createAnswer : (req, res) => {
-    res.status(200).json({success: true, successMsg: `Posted answer for question ${req.params.question_id} to database`})
+    const { body, name, email, photos, date_written } = req.body;
+    const question_id = Number(req.params.question_id);
+    answersModels.createAnswer([question_id, name, email, body, date_written], (err, result) => {
+      err ? console.log('error grabbing data from db ',err) :
+        res.status(200).json({
+          success: true,
+          successMsg: 'Posted answer to database'
+        })
+    })
     return;
   },
 

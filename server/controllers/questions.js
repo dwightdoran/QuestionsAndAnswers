@@ -18,9 +18,10 @@ exports.questions = {
 
   createQuestion: (req, res) => {
     const { body, name, email, product_id, date_written } = req.body
+    console.log(req.params)
     // returns the newly created question? or list of all questions?
     questionsModels.createQuestion([product_id, name, email, body, date_written], (err, result) => {
-      err ? console.log('error grabbing data from db ',err) :
+      err ? res.status(500).send('Error Posting question to Database') :
         res.status(200).json({
           success: true,
           successMsg: 'Posted question to database'
