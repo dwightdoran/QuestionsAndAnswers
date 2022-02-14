@@ -2,7 +2,6 @@ const { pool } = require('../../db/connection.js')
 
 exports.answersModels = {
   getAnswers: (params, cb) => {
-    // grab question_id from front end
     const queryString =
     `SELECT
       answers_id, answer_body, answer_date_written, answerer_name, answer_helpfulness,

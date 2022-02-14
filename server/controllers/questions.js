@@ -18,7 +18,6 @@ exports.questions = {
 
   createQuestion: (req, res) => {
     const { body, name, email, product_id, date_written, photos } = req.body
-    console.log(req.params)
     // returns the newly created question? or list of all questions?
     questionsModels.createQuestion([product_id, name, email, body, date_written, photos], (err, result) => {
       err ? res.status(500).send('Error Posting question to Database') :
@@ -31,7 +30,15 @@ exports.questions = {
   },
 
   markQuestionHelpful: (req, res) => {
-    res.status(200).json({success: true, helpful: `question ${req.params.question_id} marked as helpful`})
+    const question_id = Number(req.params.question_id);
+    console.log(req.query)
+    questionsModels.markQuestionHelpful(question_id, (err, result) => {
+      err ? res.status(500).send('Error posted question helpfulness') :
+      res.status(200).json({
+          success: true,
+          successMsg: 'Successfully posted question helpfulness'
+        })
+    })
     return;
   },
 

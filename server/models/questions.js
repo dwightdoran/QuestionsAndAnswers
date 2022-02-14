@@ -51,13 +51,26 @@ exports.questionsModels = {
 
   markQuestionHelpful: (params, cb) => {
     // Update Helpful column
+    const queryString = `
+    UPDATE question
+    SET answer_helpfulness = ,
+    WHERE question_id = ${params};`
+    pool.connect((err, client, release) => {
+      if (err) {
+        console.error('Error acquiring client', err.stack)
+      } else {
+        updateQuestion = async () => {
+          await client.query(queryString, (err, result) => {
+          return err ?
+          console.error('Error executing query', err.stack) :
+          cb(null, result.rows);
+        })}
+      }
+      updateQuestion();
+    })
   },
 
   markQuestionReported: (params, cb) => {
     // Update reported column
   }
-}
-
-// INSERT INTO questions (product_id, asker_name, asker_email, question_body)
-// VALUES (1000011, 'dwight', 'dwight@gmail.com', 'did this work');
-
+};
