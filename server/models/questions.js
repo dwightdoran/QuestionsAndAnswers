@@ -23,7 +23,7 @@ exports.questionsModels = {
           await client.query(queryString, (err, result) => {
           return err ?
           console.error('Error executing query', err.stack) :
-          (cb(null, result.rows));
+          (console.log(result.rows), cb(null, result.rows));
         })}
       }
       fetchQuestions();

@@ -1,15 +1,17 @@
 // import questions model functions
-const { questionsModels } = require('../models/questions.js')
+const { questionsModels } = require('../models/questions.js');
+const { dataConverter } = require('../utils/dataConverter.js');
+const { questionsConv, answersConv } = dataConverter;
 
 exports.questions = {
   getQuestions: (req, res) => {
-    let product_id = Number(req.query.product_id) || 64620;
+    let product_id = Number(req.query.product_id);
     questionsModels.getQuestions(product_id, (err, result) => {
       err ? console.log('error grabbing data from db ',err) :
       res.status(200).send({
         success: true,
         successMsg: 'Grabbed questions',
-        data: transformQuestions(result, product_id)
+        data: questionsConv(result, product_id)
       })
 
     });
@@ -52,14 +54,3 @@ exports.questions = {
     return;
   }
 }
-
-const transformQuestions = (questionsArray, product_id) => {
-  // console.log(questionsArray)
-  let resultQuestions = {
-    product_id: product_id || 64620,
-    results: questionsArray
-  };
-
-  return resultQuestions;
-}
-
