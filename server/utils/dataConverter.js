@@ -42,7 +42,7 @@ exports.dataConverter = {
     data['results'] = results;
     return data
   },
-
+  // converts data recieved from database to structure the front end expects
   answersConv: (input, question_id, page, count) => {
     let data = {};
     data.question = JSON.stringify(question_id);
