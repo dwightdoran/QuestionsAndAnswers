@@ -53,9 +53,43 @@ exports.answersModels = {
     })
   },
 
-  markAnswerHelpful: () => {
+  markAnswerHelpful: (params, cb) => {
+    const queryString = `
+    UPDATE answers
+    SET answer_helpfulness = answer_helpfulness + 1
+    WHERE answers_id = ${params}`
+    pool.connect((err, client, release) => {
+      if (err) {
+        console.error('Error acquiring client', err.stack)
+      } else {
+        updateAnswer= async () => {
+          await client.query(queryString, (err, result) => {
+          return err ?
+          console.error('Error executing query', err.stack) :
+          cb(null, result.rows);
+        })}
+      }
+      updateAnswer();
+    })
   },
 
-  markAnswerReported: () => {
+  markAnswerReported: (params, cb) => {
+    const queryString = `
+    UPDATE answers
+    SET answer_reported = NOT answer_reported
+    WHERE answers_id = ${params}`
+    pool.connect((err, client, release) => {
+      if (err) {
+        console.error('Error acquiring client', err.stack)
+      } else {
+        reportAnswer = async () => {
+          await client.query(queryString, (err, result) => {
+          return err ?
+          console.error('Error executing query', err.stack) :
+          cb(null, result.rows);
+        })}
+      }
+      reportAnswer();
+    })
   }
 }

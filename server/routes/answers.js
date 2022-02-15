@@ -8,9 +8,9 @@ router.route('/qa/questions/:question_id/answers')
   .post((req, res) => {answers.createAnswer(req, res)})
 
 router.route('/qa/answers/:answer_id/helpful')
-  .put(answers.markAnswerHelpful)
+  .put((req, res) => {answers.markAnswerHelpful(req, res)})
 
 router.route('/qa/answers/:answer_id/report')
-  .put(answers.markAnswerReported)
+  .put((req, res) => {answers.markAnswerReported(req, res)})
 
 module.exports = router;

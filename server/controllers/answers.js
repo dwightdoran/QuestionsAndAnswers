@@ -28,12 +28,26 @@ exports.answers = {
   },
 
   markAnswerHelpful: (req, res) => {
-    res.status(200).json({success: true, helpful: `answer ${req.params.answer_id} marked as helpful`})
+    const answers_id = Number(req.params.answer_id);
+    answersModels.markAnswerHelpful(answers_id, (err, result) => {
+      err ? res.status(500).send('Error posted answer helpfulness') :
+      res.status(200).json({
+          success: true,
+          successMsg: `Successfully posted answer helpfulness `
+        })
+    })
     return;
   },
 
   markAnswerReported: (req, res) => {
-    res.status(200).json({success: true, reported: `answer ${req.params.answer_id} marked as reported`})
+    const answers_id = Number(req.params.answer_id);
+    answersModels.markAnswerReported(answers_id, (err, result) => {
+      err ? res.status(500).send('Error marking answer reported') :
+      res.status(200).json({
+          success: true,
+          successMsg: `Successfully submitted report for answer ${answers_id}`
+        })
+    })
     return;
   }
 }
