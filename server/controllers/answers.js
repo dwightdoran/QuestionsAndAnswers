@@ -1,4 +1,6 @@
 const { answersModels } = require('../models/answers.js')
+const { dataConverter } = require('../utils/dataConverter.js');
+const { answersConv } = dataConverter;
 
 exports.answers = {
   getAnswers : (req, res) => {
@@ -8,7 +10,7 @@ exports.answers = {
       res.status(200).json({
         success: true,
         successMsg: `Grabbed answers for question ${req.params.question_id}`,
-        data: result
+        data: answersConv(result, question_id)
       });
     })
     return;

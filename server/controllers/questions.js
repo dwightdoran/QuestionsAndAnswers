@@ -1,7 +1,7 @@
 // import questions model functions
 const { questionsModels } = require('../models/questions.js');
 const { dataConverter } = require('../utils/dataConverter.js');
-const { questionsConv, answersConv } = dataConverter;
+const { questionsConv } = dataConverter;
 
 exports.questions = {
   getQuestions: (req, res) => {

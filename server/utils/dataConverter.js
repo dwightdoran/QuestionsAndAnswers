@@ -10,7 +10,6 @@ exports.dataConverter = {
     for (var i = 0; i < input.length; i++) {
       let currentAnswer = input[i].answers_id
       let currentQuestion = questionsMap[input[i].questions_id]
-
       if (currentQuestion === undefined) {
         questionsMap[input[i].questions_id] = index;
         let questionObj = {};
@@ -21,7 +20,6 @@ exports.dataConverter = {
         questionObj.question_helpfulness = input[i].question_helpfulness;
         questionObj.reported = input[i].question_reported;
         questionObj.answers = {};
-
         questionObj.answers[currentAnswer] = {};
         questionObj.answers[currentAnswer].id = input[i].answers_id;
         questionObj.answers[currentAnswer].body = input[i].answer_body;
@@ -32,7 +30,6 @@ exports.dataConverter = {
         results.push(questionObj);
         index++;
       } else if (results[currentQuestion].answers[currentAnswer] === undefined) {
-
         results[currentQuestion].answers[currentAnswer] = {};
         results[currentQuestion].answers[currentAnswer].id = input[i].answers_id;
         results[currentQuestion].answers[currentAnswer].body = input[i].answer_body;
@@ -46,7 +43,27 @@ exports.dataConverter = {
     return data
   },
 
-  answersConv: () => {
-
+  answersConv: (input, question_id, page, count) => {
+    let data = {};
+    data.question = JSON.stringify(question_id);
+    data.page = page || 1;
+    data.count = count || 5;
+    data.results = [];
+    for (var i = 0; i < input.length; i++) {
+      let answerObj = {};
+      answerObj.answer_id = Number(input[i].answers_id);
+      answerObj.body = input[i].answer_body
+      answerObj.date = input[i].answer_date_written
+      answerObj.answerer_name = input[i].answerer_name
+      answerObj.helpfulness = input[i].answer_helpfulness
+      answerObj.photos = []
+      if (input[i].photos_url !== null &&  input[i].photos_url !== 'undefined') {
+        let photo = {};
+        photo.url = input[i].photos_url
+        answerObj.photos.push(photo)
+      }
+      data.results.push(answerObj);
+    }
+    return data;
   }
 };
