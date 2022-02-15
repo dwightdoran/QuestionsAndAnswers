@@ -46,7 +46,7 @@ exports.answersModels = {
           await client.query(queryString, (err, result) => {
           return err ?
           cb(err, null) :
-          (console.log(result.rows),cb(null, result.rows));
+          (cb(null, result.rows));
         })}
       }
       addAnswer();

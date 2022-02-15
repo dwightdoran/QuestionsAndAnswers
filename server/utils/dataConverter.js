@@ -1,87 +1,52 @@
 
 exports.dataConverter = {
-  questionsConv: (result, product_id) => {
-    let resultQuestions = {
-      product_id: product_id,
-      results: result
-    };
-    return resultQuestions;
+  // converts data recieved from database to structure the front end expects
+  questionsConv: (input, product_id) => {
+    let data = {};
+    data['product_id'] = product_id;
+    let results = [];
+    let questionsMap = {};
+    let index = 0;
+    for (var i = 0; i < input.length; i++) {
+      let currentAnswer = input[i].answers_id
+      let currentQuestion = questionsMap[input[i].questions_id]
+
+      if (currentQuestion === undefined) {
+        questionsMap[input[i].questions_id] = index;
+        let questionObj = {};
+        questionObj.question_id = input[i].questions_id;
+        questionObj.question_body = input[i].question_body;
+        questionObj.question_date = input[i].question_date_written;
+        questionObj.asker_name = input[i].asker_name;
+        questionObj.question_helpfulness = input[i].question_helpfulness;
+        questionObj.reported = input[i].question_reported;
+        questionObj.answers = {};
+
+        questionObj.answers[currentAnswer] = {};
+        questionObj.answers[currentAnswer].id = input[i].answers_id;
+        questionObj.answers[currentAnswer].body = input[i].answer_body;
+        questionObj.answers[currentAnswer].date = input[i].answer_date_written;
+        questionObj.answers[currentAnswer].answerer_name = input[i].answerer_name
+        questionObj.answers[currentAnswer].helpfulness = input[i].answer_helpfulness
+        questionObj.answers[currentAnswer].photos = [input[i].photos_url];
+        results.push(questionObj);
+        index++;
+      } else if (results[currentQuestion].answers[currentAnswer] === undefined) {
+
+        results[currentQuestion].answers[currentAnswer] = {};
+        results[currentQuestion].answers[currentAnswer].id = input[i].answers_id;
+        results[currentQuestion].answers[currentAnswer].body = input[i].answer_body;
+        results[currentQuestion].answers[currentAnswer].date = input[i].answer_date_written;
+        results[currentQuestion].answers[currentAnswer].answerer_name = input[i].answerer_name
+        results[currentQuestion].answers[currentAnswer].helpfulness = input[i].answer_helpfulness
+        results[currentQuestion].answers[currentAnswer].photos = [input[i].photos_url];
+      }
+    }
+    data['results'] = results;
+    return data
   },
 
   answersConv: () => {
 
   }
-}
-
-// [
-//   {
-//     questions_id: '246188',
-//     question_body: 'Nulla voluptatum hic dolores numquam ut magni at dignissimos totam.',
-//     question_date_written: 2021-03-27T12:29:14.000Z,
-//     asker_name: 'Haylie_Wunsch79',
-//     question_reported: false,
-//     question_helpfulness: 0,
-//     answers_id: '480519',
-//     answer_body: 'Vel ea officia corporis quaerat quia praesentium velit culpa.',
-//     answer_date_written: 2020-10-18T04:58:20.000Z,
-//     answerer_name: 'Cristal_Swaniawski',
-//     answer_helpfulness: 4,
-//     photos_url: 'https://images.unsplash.com/photo-1519862170344-6cd5e49cb996?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80'
-//   },
-//   {
-//     questions_id: '246188',
-//     question_body: 'Nulla voluptatum hic dolores numquam ut magni at dignissimos totam.',
-//     question_date_written: 2021-03-27T12:29:14.000Z,
-//     asker_name: 'Haylie_Wunsch79',
-//     question_reported: false,
-//     question_helpfulness: 0,
-//     answers_id: '480519',
-//     answer_body: 'Vel ea officia corporis quaerat quia praesentium velit culpa.',
-//     answer_date_written: 2020-10-18T04:58:20.000Z,
-//     answerer_name: 'Cristal_Swaniawski',
-//     answer_helpfulness: 4,
-//     photos_url: 'undefined'
-//   },
-//   {
-//     questions_id: '246188',
-//     question_body: 'Nulla voluptatum hic dolores numquam ut magni at dignissimos totam.',
-//     question_date_written: 2021-03-27T12:29:14.000Z,
-//     asker_name: 'Haylie_Wunsch79',
-//     question_reported: false,
-//     question_helpfulness: 0,
-//     answers_id: '480520',
-//     answer_body: 'Assumenda ut reprehenderit reprehenderit beatae in qui eos dolorum corrupti.',
-//     answer_date_written: 2020-08-27T18:30:28.000Z,
-//     answerer_name: 'Keshawn_Bailey',
-//     answer_helpfulness: 18,
-//     photos_url: 'https://images.unsplash.com/photo-1517456837005-d757b959ae2b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60'
-//   },
-//   {
-//     questions_id: '246188',
-//     question_body: 'Nulla voluptatum hic dolores numquam ut magni at dignissimos totam.',
-//     question_date_written: 2021-03-27T12:29:14.000Z,
-//     asker_name: 'Haylie_Wunsch79',
-//     question_reported: false,
-//     question_helpfulness: 0,
-//     answers_id: '480520',
-//     answer_body: 'Assumenda ut reprehenderit reprehenderit beatae in qui eos dolorum corrupti.',
-//     answer_date_written: 2020-08-27T18:30:28.000Z,
-//     answerer_name: 'Keshawn_Bailey',
-//     answer_helpfulness: 18,
-//     photos_url: 'undefined'
-//   },
-//   {
-//     questions_id: '246188',
-//     question_body: 'Nulla voluptatum hic dolores numquam ut magni at dignissimos totam.',
-//     question_date_written: 2021-03-27T12:29:14.000Z,
-//     asker_name: 'Haylie_Wunsch79',
-//     question_reported: false,
-//     question_helpfulness: 0,
-//     answers_id: '480521',
-//     answer_body: 'Aspernatur id sunt voluptates temporibus quisquam.',
-//     answer_date_written: 2020-10-29T02:47:42.000Z,
-//     answerer_name: 'Morris.Farrell',
-//     answer_helpfulness: 15,
-//     photos_url: 'undefined'
-//   }
-// ]
+};
