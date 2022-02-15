@@ -31,7 +31,6 @@ exports.questions = {
 
   markQuestionHelpful: (req, res) => {
     const question_id = Number(req.params.question_id);
-    console.log(req.query)
     questionsModels.markQuestionHelpful(question_id, (err, result) => {
       err ? res.status(500).send('Error posted question helpfulness') :
       res.status(200).json({

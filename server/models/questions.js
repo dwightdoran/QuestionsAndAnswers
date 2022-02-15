@@ -50,11 +50,10 @@ exports.questionsModels = {
   },
 
   markQuestionHelpful: (params, cb) => {
-    // Update Helpful column
     const queryString = `
-    UPDATE question
-    SET answer_helpfulness = ,
-    WHERE question_id = ${params};`
+    UPDATE questions
+    SET question_helpfulness = question_helpfulness + 1
+    WHERE questions_id = ${params}`
     pool.connect((err, client, release) => {
       if (err) {
         console.error('Error acquiring client', err.stack)
@@ -71,6 +70,23 @@ exports.questionsModels = {
   },
 
   markQuestionReported: (params, cb) => {
-    // Update reported column
+    const queryString = `
+    UPDATE questions
+    SET question_reported = NOT question_reported
+    WHERE questions_id = ${params}`
+
+    pool.connect((err, client, release) => {
+      if (err) {
+        console.error('Error acquiring client', err.stack)
+      } else {
+        reportQuestion = async () => {
+          await client.query(queryString, (err, result) => {
+          return err ?
+          console.error('Error executing query', err.stack) :
+          cb(null, result.rows);
+        })}
+      }
+      reportQuestion();
+    })
   }
 };
