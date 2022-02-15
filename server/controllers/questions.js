@@ -42,7 +42,14 @@ exports.questions = {
   },
 
   markQuestionReported: (req, res) => {
-    res.status(200).json({success: true, reported: `question ${req.params.question_id} marked as reported`})
+    const question_id = Number(req.params.question_id);
+    questionsModels.markQuestionReported(question_id, (err, result) => {
+      err ? res.status(500).send('Error posted question helpfulness') :
+      res.status(200).json({
+          success: true,
+          successMsg: `Successfully submitted report for question ${question_id}`
+        })
+    })
     return;
   }
 }
