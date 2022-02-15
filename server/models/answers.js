@@ -29,9 +29,9 @@ exports.answersModels = {
   createAnswer: (params, cb) => {
     const queryString =`BEGIN;
     INSERT INTO answers
-      (question_id, answerer_name, answerer_email, answer_body, answer_date_written)
+      (question_id, answerer_name, answerer_email, answer_body, answer_date_written, answer_reported, answer_helpfulness)
     VALUES
-      (${params[0]}, '${params[1]}', '${params[2]}', '${params[3]}', '${params[4]}');
+      (${params[0]}, '${params[1]}', '${params[2]}', '${params[3]}', '${params[4]}', false, 0);
     INSERT INTO photos
       (answer_id, photos_url)
     VALUES

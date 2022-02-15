@@ -17,9 +17,8 @@ exports.questions = {
   },
 
   createQuestion: (req, res) => {
-    const { body, name, email, product_id, date_written, photos } = req.body
-    // returns the newly created question? or list of all questions?
-    questionsModels.createQuestion([product_id, name, email, body, date_written, photos], (err, result) => {
+    const { body, name, email, product_id, date_written } = req.body
+    questionsModels.createQuestion([product_id, name, email, body, date_written], (err, result) => {
       err ? res.status(500).send('Error Posting question to Database') :
         res.status(200).json({
           success: true,

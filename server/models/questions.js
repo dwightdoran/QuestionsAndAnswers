@@ -32,8 +32,8 @@ exports.questionsModels = {
 
   createQuestion: (params, cb) => {
     const queryString = `INSERT INTO questions
-    (product_id, asker_name, asker_email, question_body, question_date_written)
-    VALUES (${params[0]}, '${params[1]}', '${params[2]}', '${params[3]}', '${params[4]}')`;
+    (product_id, asker_name, asker_email, question_body, question_date_written, question_reported, question_helpfulness)
+    VALUES (${params[0]}, '${params[1]}', '${params[2]}', '${params[3]}', '${params[4]}', false, 0)`;
     pool.connect((err, client, release) => {
       if (err) {
         console.error('Error acquiring client', err.stack)
