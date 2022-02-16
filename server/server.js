@@ -1,10 +1,8 @@
 const makeApp = require('./index.js');
-const questionsDataBase = require('./models/questions.js')
-// console.log(questionsDataBase)
-const answersDataBase = require('./models/answers.js')
+const { pool } = require('../db/database.js')
 
 const port = process.env.Server_Port || 3000;
 
-const app = makeApp.app(questionsDataBase, answersDataBase);
+const app = makeApp(pool);
 
 app.listen(port, () => console.log(`listening on port ${port}`));

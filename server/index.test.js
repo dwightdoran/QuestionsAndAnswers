@@ -5,8 +5,9 @@ const createQuestion = jest.fn();
 const createAnswer = jest.fn();
 const { testData } = require('./utils/testData.js')
 
-const app = makeApp.app({
-  createQuestion
+const app = makeApp({
+  createQuestion,
+  createAnswer
 })
 
 
