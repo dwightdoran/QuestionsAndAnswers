@@ -7,7 +7,7 @@ exports.pool = new Pool({
   port: process.env.DB_Port,
   password: process.env.DB_Password,
   database: 'questions_and_answers',
-  max: 40,
+  max: 10,
   connectionTimeoutMillis: 1000,
   idleTimeoutMillis: 1000
 });

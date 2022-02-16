@@ -5,11 +5,11 @@ const answers = require('./routes/answers.js')
 
 require('dotenv/config');
 
-const app = express();
+exports.app = (quesDataBase, ansDataBase) => {
+  const app = express();
+  app.use(express.json())
 
-app.use(express.json())
-
-app.use(questions);
-app.use(answers);
-
-module.exports = app;
+  app.use(questions);
+  app.use(answers);
+  return app;
+}

@@ -1,5 +1,5 @@
 // import questions model functions
-const { questionsModels } = require('../models/questions.js');
+const questionsModels = require('../models/questions.js');
 const { dataConverter } = require('../utils/dataConverter.js');
 const { questionsConv } = dataConverter;
 
@@ -24,7 +24,8 @@ exports.questions = {
       err ? res.status(500).send('Error Posting question to Database') :
         res.status(200).json({
           success: true,
-          successMsg: 'Posted question to database'
+          successMsg: 'Posted question to database',
+          id: product_id
         })
     })
     return;
