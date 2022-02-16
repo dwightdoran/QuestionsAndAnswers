@@ -1,17 +1,27 @@
 const request = require('supertest');
-const app = require('./index.js');
-const { pool } = require('../db/connection.js')
+const makeApp = require('./index.js');
+
+const createQuestion = jest.fn();
+const createAnswer = jest.fn();
+const { testData } = require('./utils/testData.js')
+
+const app = makeApp({
+  createQuestion,
+  createAnswer
+})
+
+
 const question_id = 10;
 const answer_id = 50;
-const testQuestion = {
-  "body": "test the post route?",
-  "name": "test guy",
-  "email": "test@gmail.com",
-  "photos": "photo urls go here",
-  "date_written": "2022-2-14 10:28:12"
-};
 
 describe('tests', () => {
+
+  beforeEach(() => {
+    createQuestion.mockReset();
+    createAnswer.mockReset();
+    // createQuestion.mockResolvedValue(0)
+    // createAnswer.mockResolvedValue(0)
+  })
 
   xdescribe('should connect', () => {
     test('should respond with a 200 status code', async () => {
@@ -68,37 +78,45 @@ describe('tests', () => {
   describe('POST /qa/questions route', () => {
     test('responds with a status code of 200', async () => {
       const response = await request(app)
-      .post('/qa/questions')
+      .post('/qa/questions').send(testData.testQuestions[0])
       expect(response.statusCode).toBe(200)
     })
     test('responds with json data type', async () => {
       const response = await request(app)
-      .post('/qa/questions')
+      .post('/qa/questions').send(testData.testQuestions[0])
       expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
     })
     test('responds with Success message after Post', async () => {
       const response = await request(app)
-      .post('/qa/questions')
+      .post('/qa/questions').send(testData.testQuestions[0])
       expect(response.res.text).toEqual(expect.stringContaining('Posted question to database'))
+    })
+    test('saves question to the database', async () => {
+      createQuestion.mockReset();
+      const response = await request(app)
+      .post('/qa/questions').send(testData.testQuestions[0])
+      // expect(createQuestion.mock.calls.length).toBe(1)
+
+      // console.log(createQuestion.mock)
     })
   })
   describe('POST /qa/questions/:question_id/answers route', () => {
     test('responds with a status code of 200', async () => {
       const response = await request(app)
       .post(`/qa/questions/${question_id}/answers`)
-      .send(testQuestion)
+      .send(testData.testAnswers[0])
       expect(response.statusCode).toBe(200)
     })
     test('responds with json data type', async () => {
       const response = await request(app)
       .post(`/qa/questions/${question_id}/answers`)
-      .send(testQuestion)
+      .send(testData.testAnswers[0])
       expect(response.headers['content-type']).toEqual(expect.stringContaining('json'))
     })
     test('responds with Success message after Post', async () => {
       const response = await request(app)
       .post(`/qa/questions/${question_id}/answers`)
-      .send(testQuestion)
+      .send(testData.testAnswers[0])
       expect(response.res.text).toEqual(expect.stringContaining(`Posted answer for question ${question_id} to database`))
     })
   })
@@ -174,7 +192,6 @@ describe('tests', () => {
     test('responds with helpful message on answer', async () => {
       const response = await request(app)
       .put(`/qa/answers/${answer_id}/helpful`)
-      console.log(response.res.text)
       expect(response.res.text).toEqual(expect.stringContaining(`answer ${answer_id} marked as helpful`))
     })
   })
