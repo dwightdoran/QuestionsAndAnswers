@@ -23,7 +23,7 @@ exports.answers = {
       err ? console.log('error grabbing data from db ',err) :
         res.status(200).json({
           success: true,
-          successMsg: 'Posted answer to database'
+          successMsg: `Posted answer for question ${question_id} to database`
         })
     })
     return;
@@ -32,10 +32,10 @@ exports.answers = {
   markAnswerHelpful: (req, res) => {
     const answers_id = Number(req.params.answer_id);
     answersModels.markAnswerHelpful([answers_id], (err, result) => {
-      err ? res.status(500).send('Error posted answer helpfulness') :
+      err ? res.status(500).send('Error posting answer helpfulness') :
       res.status(200).json({
           success: true,
-          successMsg: `Successfully posted answer helpfulness `
+          successMsg: `answer ${answers_id} marked as helpful`
         })
     })
     return;
@@ -47,7 +47,7 @@ exports.answers = {
       err ? res.status(500).send('Error marking answer reported') :
       res.status(200).json({
           success: true,
-          successMsg: `Successfully submitted report for answer ${answers_id}`
+          successMsg: `answer ${answers_id} marked as reported`
         })
     })
     return;

@@ -36,7 +36,7 @@ exports.questions = {
       err ? res.status(500).send('Error posted question helpfulness') :
       res.status(200).json({
           success: true,
-          successMsg: 'Successfully posted question helpfulness'
+          successMsg: `question ${question_id} marked as helpful`
         })
     })
     return;
@@ -48,7 +48,7 @@ exports.questions = {
       err ? res.status(500).send('Error posted question helpfulness') :
       res.status(200).json({
           success: true,
-          successMsg: `Successfully submitted report for question ${question_id}`
+          successMsg: `question ${question_id} marked as reported`
         })
     })
     return;

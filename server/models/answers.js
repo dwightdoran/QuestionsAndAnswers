@@ -86,7 +86,7 @@ exports.answersModels = {
           await client.query(queryString, params, (err, result) => {
           return err ?
           console.error('Error executing query', err.stack) :
-          cb(null, result.rows);
+          (console.log('report answer here ', result.rows), cb(null, result.rows));
         })}
       }
       reportAnswer();
