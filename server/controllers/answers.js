@@ -5,7 +5,7 @@ const { answersConv } = dataConverter;
 exports.answers = {
   getAnswers : (req, res) => {
     let question_id = Number(req.params.question_id) || 263761;
-    answersModels.getAnswers(question_id, (err, result) => {
+    answersModels.getAnswers([question_id], (err, result) => {
       err ? console.log('error grabbing data from db ',err) :
       res.status(200).json({
         success: true,
@@ -31,7 +31,7 @@ exports.answers = {
 
   markAnswerHelpful: (req, res) => {
     const answers_id = Number(req.params.answer_id);
-    answersModels.markAnswerHelpful(answers_id, (err, result) => {
+    answersModels.markAnswerHelpful([answers_id], (err, result) => {
       err ? res.status(500).send('Error posted answer helpfulness') :
       res.status(200).json({
           success: true,
@@ -43,7 +43,7 @@ exports.answers = {
 
   markAnswerReported: (req, res) => {
     const answers_id = Number(req.params.answer_id);
-    answersModels.markAnswerReported(answers_id, (err, result) => {
+    answersModels.markAnswerReported([answers_id], (err, result) => {
       err ? res.status(500).send('Error marking answer reported') :
       res.status(200).json({
           success: true,

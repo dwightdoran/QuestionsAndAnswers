@@ -9,14 +9,14 @@ exports.answersModels = {
     FROM answers AS a
     FULL JOIN photos AS p
     ON p.answer_id = a.answers_id
-    WHERE question_id = ${params}
+    WHERE question_id = $1
     ORDER BY answer_id`;
     pool.connect((err, client, release) => {
       if (err) {
         console.error('Error acquiring client', err.stack)
       } else {
         grabAnswers = async () => {
-          await client.query(queryString, (err, result) => {
+          await client.query(queryString, params, (err, result) => {
           return err ?
           cb(err, null) :
           cb(null, result.rows);
@@ -57,13 +57,13 @@ exports.answersModels = {
     const queryString = `
     UPDATE answers
     SET answer_helpfulness = answer_helpfulness + 1
-    WHERE answers_id = ${params}`
+    WHERE answers_id = $1`
     pool.connect((err, client, release) => {
       if (err) {
         console.error('Error acquiring client', err.stack)
       } else {
         updateAnswer= async () => {
-          await client.query(queryString, (err, result) => {
+          await client.query(queryString, params, (err, result) => {
           return err ?
           console.error('Error executing query', err.stack) :
           cb(null, result.rows);
@@ -77,13 +77,13 @@ exports.answersModels = {
     const queryString = `
     UPDATE answers
     SET answer_reported = NOT answer_reported
-    WHERE answers_id = ${params}`
+    WHERE answers_id = $1`
     pool.connect((err, client, release) => {
       if (err) {
         console.error('Error acquiring client', err.stack)
       } else {
         reportAnswer = async () => {
-          await client.query(queryString, (err, result) => {
+          await client.query(queryString, params, (err, result) => {
           return err ?
           console.error('Error executing query', err.stack) :
           cb(null, result.rows);

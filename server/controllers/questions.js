@@ -6,7 +6,7 @@ const { questionsConv } = dataConverter;
 exports.questions = {
   getQuestions: (req, res) => {
     let product_id = Number(req.query.product_id);
-    questionsModels.getQuestions(product_id, (err, result) => {
+    questionsModels.getQuestions([product_id], (err, result) => {
       err ? console.log('error grabbing data from db ',err) :
       res.status(200).send({
         success: true,
@@ -32,7 +32,7 @@ exports.questions = {
 
   markQuestionHelpful: (req, res) => {
     const question_id = Number(req.params.question_id);
-    questionsModels.markQuestionHelpful(question_id, (err, result) => {
+    questionsModels.markQuestionHelpful([question_id], (err, result) => {
       err ? res.status(500).send('Error posted question helpfulness') :
       res.status(200).json({
           success: true,
@@ -44,7 +44,7 @@ exports.questions = {
 
   markQuestionReported: (req, res) => {
     const question_id = Number(req.params.question_id);
-    questionsModels.markQuestionReported(question_id, (err, result) => {
+    questionsModels.markQuestionReported([question_id], (err, result) => {
       err ? res.status(500).send('Error posted question helpfulness') :
       res.status(200).json({
           success: true,
