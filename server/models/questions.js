@@ -27,6 +27,7 @@ exports.questionsModels = {
         })}
       }
       fetchQuestions();
+      release();
     })
   },
 
@@ -46,6 +47,7 @@ exports.questionsModels = {
         })}
       }
       addQuestion();
+      release();
     })
   },
 
@@ -66,6 +68,7 @@ exports.questionsModels = {
         })}
       }
       updateQuestion();
+      release();
     })
   },
 
@@ -87,6 +90,7 @@ exports.questionsModels = {
         })}
       }
       reportQuestion();
+      release();
     })
   }
 };

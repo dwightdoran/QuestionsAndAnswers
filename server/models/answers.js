@@ -23,6 +23,7 @@ exports.answersModels = {
         })}
       }
       grabAnswers();
+      release();
     })
   },
 
@@ -50,6 +51,7 @@ exports.answersModels = {
         })}
       }
       addAnswer();
+      release();
     })
   },
 
@@ -70,6 +72,7 @@ exports.answersModels = {
         })}
       }
       updateAnswer();
+      release();
     })
   },
 
@@ -90,6 +93,7 @@ exports.answersModels = {
         })}
       }
       reportAnswer();
+      release();
     })
   }
 }

@@ -8,7 +8,7 @@ const testQuestion = {
   "name": "test guy",
   "email": "test@gmail.com",
   "photos": "photo urls go here",
-  "date_written": "2022-2-14 10:28:12"
+  "date_written": "2022-2-14 10:28:13"
 };
 
 describe('tests', () => {
@@ -174,7 +174,6 @@ describe('tests', () => {
     test('responds with helpful message on answer', async () => {
       const response = await request(app)
       .put(`/qa/answers/${answer_id}/helpful`)
-      console.log(response.res.text)
       expect(response.res.text).toEqual(expect.stringContaining(`answer ${answer_id} marked as helpful`))
     })
   })
