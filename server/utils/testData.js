@@ -32,14 +32,14 @@ exports.testData = {
   testAnswers: [
     {
       "body": "testing 1111",
-      "name": "answer test guy",
+      "name": "tests name here",
       "email": "test1@gmail.com",
       "photos": "photo urls go here",
       "date_written": "1111-1-11 11:11:11"
     },
     {
       "body": "testing 2222",
-      "name": "answer test guy",
+      "name": "tests name here",
       "email": "test2@gmail.com",
       "photos": "photo urls go here",
       "date_written": "2222-2-22 22:22:22"

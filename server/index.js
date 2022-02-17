@@ -31,7 +31,7 @@ module.exports = (database) => {
       const answers = await database.getAnswers([question_id])
       res.status(200).send({
         success: true,
-        successMsg: 'Grabbed answers',
+        successMsg: `Grabbed answers for question ${question_id}`,
         data: answersConv(answers, question_id)
       })
     } catch (err) {
@@ -50,7 +50,7 @@ module.exports = (database) => {
       const question = await database.createQuestion(params);
       res.status(200).send({
         success: true,
-        successMsg: 'Posted question',
+        successMsg: 'Posted question to database',
         data: product_id
       })
     } catch (err) {
@@ -72,7 +72,7 @@ module.exports = (database) => {
       const newPhotos = await database.addPhotos(params2);
       res.status(200).send({
         success: true,
-        successMsg: 'Posted answer',
+        successMsg: `Posted answer for question ${question_id} to database`,
         data: question_id
       })
     } catch (err) {
@@ -92,7 +92,7 @@ module.exports = (database) => {
       const helpful = await database.markQuestionHelpful([question_id])
       res.status(200).send({
         success: true,
-        successMsg: 'Updated question helpfulness',
+        successMsg: `question ${question_id} marked as helpful`,
         id: question_id
       })
     } catch (err) {
@@ -109,7 +109,7 @@ module.exports = (database) => {
       const report = await database.markQuestionReported([question_id]);
       res.status(200).send({
         success: true,
-        successMsg: 'Reported question',
+        successMsg: `question ${question_id} marked as reported`,
         data: question_id
       })
     } catch (err) {
@@ -122,12 +122,12 @@ module.exports = (database) => {
   })
   app.put('/qa/answers/:answer_id/helpful', async (req, res) => {
     try {
-      const answers_id = Number(req.params.answer_id);
-      const helpful = await database.markAnswerHelpful([answers_id]);
+      const answer_id = Number(req.params.answer_id);
+      const helpful = await database.markAnswerHelpful([answer_id]);
       res.status(200).send({
         success: true,
-        successMsg: 'Updated answer helpfulness',
-        data: answers_id
+        successMsg: `answer ${answer_id} marked as helpful`,
+        data: answer_id
       })
     } catch (err) {
       res.status(500).send({
@@ -139,12 +139,13 @@ module.exports = (database) => {
   })
   app.put('/qa/answers/:answer_id/report', async (req, res) => {
     try {
-      const answers_id = Number(req.params.answer_id);
-      const report = await database.markAnswerReported([answers_id]);
+      const answer_id = Number(req.params.answer_id);
+      console.log('answer_id ',answer_id)
+      const report = await database.markAnswerReported([answer_id]);
       res.status(200).send({
         success: true,
-        successMsg: 'Reported answer',
-        data: answers_id
+        successMsg: `answer ${answer_id} marked as reported`,
+        data: answer_id
       })
     } catch (err) {
       res.status(500).send({
