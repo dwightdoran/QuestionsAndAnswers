@@ -140,7 +140,6 @@ module.exports = (database) => {
   app.put('/qa/answers/:answer_id/report', async (req, res) => {
     try {
       const answer_id = Number(req.params.answer_id);
-      console.log('answer_id ',answer_id)
       const report = await database.markAnswerReported([answer_id]);
       res.status(200).send({
         success: true,
