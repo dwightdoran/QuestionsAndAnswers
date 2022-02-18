@@ -46,6 +46,9 @@ module.exports = (database) => {
   app.post('/qa/questions', async (req, res) => {
     try {
       const { product_id, name, email, body, date_written } = req.body;
+      if (!name || !email || !body || !product_id) {
+        throw err
+      }
       const params = [product_id, name, email, body, date_written];
       const question = await database.createQuestion(params);
       res.status(200).send({
@@ -65,6 +68,9 @@ module.exports = (database) => {
   app.post('/qa/questions/:question_id/answers', async (req, res) => {
     try {
       const { body, name, email, photos, date_written } = req.body;
+      if (!name || !email || !body) {
+        throw err
+      };
       const question_id = Number(req.params.question_id);
       const params1 = [question_id, name, email, body, date_written];
       const params2 = [question_id, photos]
@@ -89,6 +95,9 @@ module.exports = (database) => {
   app.put('/qa/questions/:question_id/helpful', async (req, res) => {
     try {
       const question_id = Number(req.params.question_id);
+      if (isNaN(question_id)) {
+        throw err
+      }
       const helpful = await database.markQuestionHelpful([question_id])
       res.status(200).send({
         success: true,
@@ -106,6 +115,9 @@ module.exports = (database) => {
   app.put('/qa/questions/:question_id/report', async (req, res) => {
     try {
       const question_id = Number(req.params.question_id);
+      if (isNaN(question_id)) {
+        throw err
+      }
       const report = await database.markQuestionReported([question_id]);
       res.status(200).send({
         success: true,
@@ -123,6 +135,9 @@ module.exports = (database) => {
   app.put('/qa/answers/:answer_id/helpful', async (req, res) => {
     try {
       const answer_id = Number(req.params.answer_id);
+      if (isNaN(answer_id)) {
+        throw err
+      }
       const helpful = await database.markAnswerHelpful([answer_id]);
       res.status(200).send({
         success: true,
@@ -140,7 +155,9 @@ module.exports = (database) => {
   app.put('/qa/answers/:answer_id/report', async (req, res) => {
     try {
       const answer_id = Number(req.params.answer_id);
-      console.log('answer_id ',answer_id)
+      if (isNaN(answer_id)) {
+        throw err
+      }
       const report = await database.markAnswerReported([answer_id]);
       res.status(200).send({
         success: true,
@@ -150,7 +167,7 @@ module.exports = (database) => {
     } catch (err) {
       res.status(500).send({
         success: false,
-        successMsg: 'Failed to put answer',
+        successMsg: 'Failed to report answer',
         error: err.message
       })
     }
