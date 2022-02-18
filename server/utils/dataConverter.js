@@ -40,6 +40,7 @@ exports.dataConverter = {
       }
     }
     data['results'] = results;
+    // console.log(data)
     return data
   },
   // converts data recieved from database to structure the front end expects

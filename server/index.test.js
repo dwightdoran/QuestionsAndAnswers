@@ -1,6 +1,10 @@
 const request = require('supertest');
 const makeApp = require('./index.js');
-const { pool }= require('../db/database.js')
+const { pool } = require('../db/database.js')
+const { dataConverter } = require('./utils/dataConverter')
+const { questionsConv, answersConv } = dataConverter ;
+
+
 
 const getQuestions = jest.fn();
 const getAnswers = jest.fn();
@@ -274,13 +278,17 @@ describe('route tests', () => {
 
 describe('Helper Function tests', () => {
   describe('Questions Converter', () => {
-    test('Convert Questions', () => {
-      expect(7).toEqual(7)
+    test('Should convert Questions Data recieved in tables from DB to structure for the Front End', () => {
+      expect(questionsConv(testData.mockQuestionData, 64621).product_id).toEqual(64621)
+      expect(questionsConv(testData.mockQuestionData, 64621).results.length).toEqual(5)
+      expect(questionsConv(testData.mockQuestionData, 64621).results[0].reported).toEqual(false)
     })
   })
   describe('Answers Converter', () => {
-    test('Convert Answers', () => {
-      expect(7).toEqual(7)
+    test('Should convert Answers Data recieved in tables from DB to structure for the Front End', () => {
+      expect(answersConv(testData.mockAnswerData, 563774).question).toEqual('563774')
+      expect(answersConv(testData.mockAnswerData, 563774).results[0].answer_id).toEqual(1101684)
+      expect(answersConv(testData.mockAnswerData, 563774).results[0].answerer_name).toEqual('Jeanette.Rath')
     })
   })
 })
