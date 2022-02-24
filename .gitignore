@@ -109,3 +109,6 @@ dist
 # txt files
 *.txt
 *queryEX
+
+# docker
+*pgdata
