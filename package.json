@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx jest --coverage",
     "start": "nodemon server/server.js",
-    "k6": "k6 run load-test/script.js"
+    "k6": "k6 run load-test/script.js",
+    "newRelic": "K6_STATSD_ENABLE_TAGS=true k6 run --out statsd load-test/script.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
   },
   "dependencies": {
     "k6": "0.0.0",
+    "newrelic": "^8.8.0",
     "pg": "^8.7.3"
   }
 }
