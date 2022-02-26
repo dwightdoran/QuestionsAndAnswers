@@ -112,3 +112,7 @@ dist
 
 # docker
 *pgdata
+
+# new Relic
+newRelic.js
+

@@ -16,8 +16,6 @@ export const options = {
 
 export default function () {
   http.get(`http://localhost:3000/qa/questions?product_id=${Math.floor(Math.random() * (1000011 - 900001) + 900001)} `);
-  // http.get(`http://localhost:3000/qa/questions?product_id=${id}`);
-
   sleep(1);
 }
 
