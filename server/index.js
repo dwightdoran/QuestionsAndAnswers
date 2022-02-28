@@ -11,6 +11,7 @@ module.exports = (database) => {
     try {
       const product_id = Number(req.query.product_id);
       const questions = await database.getQuestions([product_id])
+      // redis save here
       res.status(200).send({
         success: true,
         successMsg: 'Grabbed questions',
