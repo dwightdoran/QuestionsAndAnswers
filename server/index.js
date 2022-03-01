@@ -1,21 +1,39 @@
 const express = require('express');
 const { dataConverter } = require('./utils/dataConverter.js');
 const { questionsConv, answersConv } = dataConverter;
+const redis = require('redis');
+const { promisify } = require('util');
 require('dotenv/config');
 
+// local host port 6739
 module.exports = (database) => {
   const app = express();
   app.use(express.json())
 
-  app.get('/qa/questions', async (req, res) => {
+  const client = redis.createClient();
+  client.connect();
+
+  const GET_ASYNC = promisify(client.get).bind(client);
+  const SET_ASYNC = promisify(client.set).bind(client);
+
+  app.get('/qa/questions', async (req, res, next) => {
     try {
       const product_id = Number(req.query.product_id);
+      // redis get here
+      const reply = await GET_ASYNC(product_id);
+      console.log('reply')
+      if (reply) {
+        res.send(reply)
+      }
       const questions = await database.getQuestions([product_id])
       // redis save here
+      const result = questionsConv(questions, product_id)
+      const saveResult = await SET_ASYNC(product_id, JSON.stringify(result))
+      console.log('new data cached')
       res.status(200).send({
         success: true,
         successMsg: 'Grabbed questions',
-        data: questionsConv(questions, product_id)
+        data: result
       })
     } catch (err) {
       res.status(500).send({
