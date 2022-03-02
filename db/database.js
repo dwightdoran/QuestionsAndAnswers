@@ -7,7 +7,7 @@ const pool = new Pool({
   port: process.env.DB_Port,
   password: process.env.DB_Docker_Password,
   database: process.env.DB_Name,
-  max: 40,
+  max: 100,
   connectionTimeoutMillis: 1000,
   idleTimeoutMillis: 1000
 });

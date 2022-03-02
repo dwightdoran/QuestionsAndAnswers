@@ -1,45 +1,70 @@
 const express = require('express');
 const { dataConverter } = require('./utils/dataConverter.js');
 const { questionsConv, answersConv } = dataConverter;
+const Redis = require('redis');
+const { promisify } = require('util');
+const cors = require('cors')
 require('dotenv/config');
 
 module.exports = (database) => {
   const app = express();
   app.use(express.json())
+  app.use(express.urlencoded({ extended: true }))
+  app.use(cors())
 
-  app.get('/qa/questions', async (req, res) => {
-    try {
-      const product_id = Number(req.query.product_id);
+  var map ={
+    hit: 0,
+    miss: 0
+  }
+  const client = Redis.createClient({
+    legacyMode: true
+  });
+  client.connect();
+  client.on('connect', () => {
+    console.log('connected to redis')
+  })
+
+
+  app.get('/qa/questions', async (req, res, next) => {
+    const product_id = Number(req.query.product_id);
+    // function that gets cached data or sets new cache
+    const questions = await getOrSetCache(product_id.toString(), async () => {
       const questions = await database.getQuestions([product_id])
-      // redis save here
+      const result = questionsConv(questions, product_id)
+      return result
+    })
+    if (questions.results.length > 0) {
       res.status(200).send({
         success: true,
         successMsg: 'Grabbed questions',
-        data: questionsConv(questions, product_id)
+        data: questions
       })
-    } catch (err) {
+    } else {
       res.status(500).send({
-        success: false,
+        success: true,
         successMsg: 'Failed to grab questions',
-        error: err.message
       })
     }
   })
 
   app.get('/qa/questions/:question_id/answers', async (req, res) => {
-    try {
-      const question_id = Number(req.params.question_id);
+    const question_id = Number(req.params.question_id);
+    // function that gets cached data or sets new cache
+    const answers = await getOrSetCache(question_id.toString(), async () => {
       const answers = await database.getAnswers([question_id])
+      const result = answersConv(answers, question_id)
+      return result
+    })
+    if (answers.results.length > 0) {
       res.status(200).send({
         success: true,
         successMsg: `Grabbed answers for question ${question_id}`,
-        data: answersConv(answers, question_id)
+        data: answers
       })
-    } catch (err) {
+    } else {
       res.status(500).send({
         success: false,
-        successMsg: 'Failed to grab answers',
-        error: err.message
+        successMsg: 'Failed to grab answers'
       })
     }
   })
@@ -173,5 +198,18 @@ module.exports = (database) => {
       })
     }
   })
+
+  const getOrSetCache = (key, cb) => {
+    return new Promise((resolve, reject) => {
+      client.get(key, async (err, data) => {
+        if (err) return reject(err)
+        if (data !== null) return resolve(JSON.parse(data))
+        const freshData = await cb();
+        client.set(key, JSON.stringify(freshData))
+        resolve(freshData)
+      })
+    })
+  }
+
   return app;
 }
