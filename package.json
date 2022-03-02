@@ -4,7 +4,7 @@
   "description": "api for Q&A service",
   "main": "index.js",
   "scripts": {
-    "test": "npx jest --coverage",
+    "test": "npx jest --coverage --detectOpenHandles",
     "start": "nodemon server/server.js",
     "k6": "k6 run load-test/script.js",
     "newRelic": "K6_STATSD_ENABLE_TAGS=true k6 run --out statsd load-test/script.js"
@@ -27,6 +27,7 @@
     "supertest": "^6.2.2"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "k6": "0.0.0",
     "newrelic": "^8.8.0",
     "pg": "^8.7.3",
