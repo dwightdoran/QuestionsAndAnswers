@@ -41,7 +41,6 @@ export default function () {
   //     "helpful": "0"
   // })
   // http.post(url, payload, params);
-
   // POST Answer
   const url = `http://localhost:3000/qa/questions/${Math.floor(Math.random() * (3518963 - 3168963) + 3168963)}/answers`
   const payload = JSON.stringify({
