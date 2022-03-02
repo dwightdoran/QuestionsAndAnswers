@@ -3,6 +3,11 @@ import { sleep } from 'k6';
 
 export const options = {
   stages: [
+    // { duration: '10s', target: 10},
+    // { duration: '10s', target: 100}
+    // { duration: '30s', target: 600}
+    { duration: '30s', target: 800}
+    // { duration: '30s', target: 1000}
     // { duration: '30s', target: 1200}
     // { duration: '30s', target: 1350}
     // { duration: '30s', target: 1400}
@@ -11,7 +16,7 @@ export const options = {
     // { duration: '10s', target: 1700}
   ]
 }
-var id = 900001
+
 export default function () {
   // GET question
   // http.get(`http://localhost:3000/qa/questions?product_id=${Math.floor(Math.random() * (1000011 - 900001) + 900001)} `);
@@ -55,4 +60,3 @@ export default function () {
   // http.post(`http://localhost:3000/qa/questions/${Math.floor(Math.random() * (3518963 - 3168963) + 3168963)}/answers`);
   // sleep(1);
 }
-
