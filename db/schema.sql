@@ -36,18 +36,19 @@ CREATE TABLE photos (
   photos_url TEXT
 );
 -- copy csv files data into local database;
--- \copy questions FROM 'data/questions.csv' DELIMITER ',' CSV HEADER;
--- \copy answers FROM 'data/answers.csv' DELIMITER ',' CSV HEADER;
--- \copy photos FROM 'data/answers_photos.csv' DELIMITER ',' CSV HEADER;
+\copy questions FROM 'data/questions.csv' DELIMITER ',' CSV HEADER;
+\copy answers FROM 'data/answers.csv' DELIMITER ',' CSV HEADER;
+\copy photos FROM 'data/answers_photos.csv' DELIMITER ',' CSV HEADER;
 
 -- copy csv files data into docker container database;
-\copy questions FROM '/var/lib/postgresql/data/data/questions.csv' DELIMITER ',' CSV HEADER;
-\copy answers FROM '/var/lib/postgresql/data/data/answers.csv' DELIMITER ',' CSV HEADER;
-\copy photos FROM '/var/lib/postgresql/data/data/answers_photos.csv' DELIMITER ',' CSV HEADER;
+-- \copy questions FROM '/var/lib/postgresql/data/data/questions.csv' DELIMITER ',' CSV HEADER;
+-- \copy answers FROM '/var/lib/postgresql/data/data/answers.csv' DELIMITER ',' CSV HEADER;
+-- \copy photos FROM '/var/lib/postgresql/data/data/answers_photos.csv' DELIMITER ',' CSV HEADER;
 
 -- add columns to questions and answers tables with timestamp datatype
 ALTER TABLE questions ADD question_date_written TIMESTAMP;
 ALTER TABLE answers ADD answer_date_written TIMESTAMP;
+-- ALTER TABLE answers DROP COLUMN answer_date_written;
 
 -- set the new columns values to the timestamp gotten from the old column values
 UPDATE questions SET question_date_written = to_timestamp(floor(question_epoch/1000));
