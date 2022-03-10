@@ -1,102 +1,102 @@
 const express = require('express');
 const { dataConverter } = require('./utils/dataConverter.js');
 const { questionsConv, answersConv } = dataConverter;
-// const Redis = require('redis');
-// const { promisify } = require('util');
-// const cors = require('cors')
+const Redis = require('redis');
+const { promisify } = require('util');
+const cors = require('cors')
 require('dotenv/config');
 
 module.exports = (database) => {
   const app = express();
   app.use(express.json())
-  // app.use(express.urlencoded({ extended: true }))
-  // app.use(cors())
+  app.use(express.urlencoded({ extended: true }))
+  app.use(cors())
 
-  // const client = Redis.createClient({
-  //   legacyMode: true
-  // });
-  // client.connect();
-  // client.on('connect', () => {
-  //   console.log('connected to redis')
-  // })
+  const client = Redis.createClient({
+    legacyMode: true
+  });
+  client.connect();
+  client.on('connect', () => {
+    console.log('connected to redis')
+  })
 
 
   app.get('/qa/questions', async (req, res, next) => {
-    try {
-      const product_id = Number(req.query.product_id);
-      const questions = await database.getQuestions([product_id])
-      res.status(200).send({
-        success: true,
-        successMsg: 'Grabbed questions',
-        data: questionsConv(questions, product_id)
-      })
-    } catch (err) {
-      res.status(500).send({
-        success: false,
-        successMsg: 'Failed to grab questions',
-        error: err.message
-      })
-    }
-    // REDIS IMPLEMENTATION =====>
-
-    // const product_id = Number(req.query.product_id);
-    // // function that gets cached data or sets new cache
-    // const questions = await getOrSetCache(product_id.toString(), async () => {
+    // try {
+    //   const product_id = Number(req.query.product_id);
     //   const questions = await database.getQuestions([product_id])
-    //   const result = questionsConv(questions, product_id)
-    //   return result
-    // })
-    // if (questions.results.length > 0) {
     //   res.status(200).send({
     //     success: true,
     //     successMsg: 'Grabbed questions',
-    //     data: questions
+    //     data: questionsConv(questions, product_id)
     //   })
-    // } else {
+    // } catch (err) {
     //   res.status(500).send({
-    //     success: true,
+    //     success: false,
     //     successMsg: 'Failed to grab questions',
+    //     error: err.message
     //   })
     // }
+    // REDIS IMPLEMENTATION =====>
+      const product_id = Number(req.query.product_id);
+      // function that gets cached data or sets new cache
+      const questions = await getOrSetCache(product_id.toString(), async () => {
+        const questions = await database.getQuestions([product_id])
+        const result = questionsConv(questions, product_id)
+        return result
+      })
+      if (questions.results.length > 0) {
+        res.status(200).send({
+          success: true,
+          successMsg: 'Grabbed questions',
+          data: questions
+        })
+      } else {
+      res.status(500).send({
+        success: true,
+        successMsg: 'Failed to grab questions',
+        error: err
+      })
+    }
   })
 
   app.get('/qa/questions/:question_id/answers', async (req, res) => {
-    try {
-      const question_id = Number(req.params.question_id);
-      const answers = await database.getAnswers([question_id])
-      res.status(200).send({
-        success: true,
-        successMsg: `Grabbed answers for question ${question_id}`,
-        data: answersConv(answers, question_id)
-      })
-    } catch (err) {
-      res.status(500).send({
-        success: false,
-        successMsg: 'Failed to grab answers',
-        error: err.message
-      })
-    }
-    // REDIS IMPLEMENTATION ======>
-
-    // const question_id = Number(req.params.question_id);
-    // // function that gets cached data or sets new cache
-    // const answers = await getOrSetCache(question_id.toString(), async () => {
+    // try {
+    //   const question_id = Number(req.params.question_id);
     //   const answers = await database.getAnswers([question_id])
-    //   const result = answersConv(answers, question_id)
-    //   return result
-    // })
-    // if (answers.results.length > 0) {
     //   res.status(200).send({
     //     success: true,
     //     successMsg: `Grabbed answers for question ${question_id}`,
-    //     data: answers
+    //     data: answersConv(answers, question_id)
     //   })
-    // } else {
+    // } catch (err) {
     //   res.status(500).send({
     //     success: false,
-    //     successMsg: 'Failed to grab answers'
+    //     successMsg: 'Failed to grab answers',
+    //     error: err.message
     //   })
     // }
+    // REDIS IMPLEMENTATION ======>
+      const question_id = Number(req.params.question_id);
+      // function that gets cached data or sets new cache
+      const answers = await getOrSetCache(question_id.toString(), async () => {
+        const answers = await database.getAnswers([question_id])
+        const result = answersConv(answers, question_id)
+        return result
+      })
+      if (answers.results.length > 0) {
+        res.status(200).send({
+          success: true,
+          successMsg: `Grabbed answers for question ${question_id}`,
+          data: answers
+        })
+      } else {
+      res.status(500).send({
+        success: false,
+        successMsg: 'Failed to grab answers',
+        error: err
+      })
+    }
   })
 
   app.post('/qa/questions', async (req, res) => {
