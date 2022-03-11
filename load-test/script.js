@@ -6,7 +6,7 @@ export const options = {
     // { duration: '10s', target: 10},
     // { duration: '10s', target: 100}
     // { duration: '30s', target: 600}
-    { duration: '3m', target: 200}
+    { duration: '10m', target: 300}
     // { duration: '30s', target: 1000}
     // { duration: '30s', target: 1200}
     // { duration: '30s', target: 1350}
@@ -16,12 +16,12 @@ export const options = {
     // { duration: '10s', target: 1700}
   ]
 }
-var id = 1;
+var id = 559;
 export default function () {
   // GET question
 
   // http.get(`http://3.91.130.61:3000/qa/questions?product_id=${Math.floor(Math.random() * (1000011 - 950000) + 950000)} `);\
-  http.get(`http://3.91.130.61:3000/qa/questions?product_id=${id} `);
+  http.get(`http://3.91.130.61:8080/qa/questions/${id}/answers`);
   id++;
 
   // GET answer

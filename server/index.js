@@ -5,6 +5,7 @@ const Redis = require('redis');
 const { promisify } = require('util');
 const cors = require('cors')
 require('dotenv/config');
+const client = require('../redis/redis-init.js')
 
 module.exports = (database) => {
   const app = express();
@@ -12,93 +13,59 @@ module.exports = (database) => {
   app.use(express.urlencoded({ extended: true }));
   app.use(cors());
 
-
-  var client = Redis.createClient();
-
-  client.connect();
-  client.on('connect', () => {
-    console.log('connected to redis')
-  })
-
-  client.on("error", function (err) {
-    console.log("Error " + err);
-});
-
+  const GET_ASYNC = promisify(client.get).bind(client);
+  const SET_ASYNC = promisify(client.set).bind(client);
 
   app.get('/qa/questions', async (req, res, next) => {
+    const product_id = Number(req.query.product_id);
     try {
-      const product_id = Number(req.query.product_id);
-      const questions = await database.getQuestions([product_id])
-      res.status(200).send({
-        success: true,
-        successMsg: 'Grabbed questions',
-        data: questionsConv(questions, product_id)
-      })
+      const reply = await GET_ASYNC(`p-${product_id}`)
+      if (reply) {
+        console.log('using cached data')
+        res.status(200).send({
+          success: true,
+          successMsg: 'Grabbed questions',
+          data: JSON.parse(reply)
+        })
+      } else {
+        const questions = await database.getQuestions([product_id]);
+        const save = await SET_ASYNC(`p-${product_id}`, JSON.stringify(questions))
+        console.log('new key/value cached')
+        res.status(200).send({
+          success: true,
+          successMsg: 'Grabbed questions',
+          data: questions
+        })
+      }
     } catch (err) {
-      res.status(500).send({
-        success: false,
-        successMsg: 'Failed to grab questions',
-        error: err.message
-      })
+      res.send(err.message)
     }
-    // REDIS IMPLEMENTATION =====>
-    //   const product_id = Number(req.query.product_id);
-    //   // function that gets cached data or sets new cache
-    //   const questions = await getOrSetCache(product_id.toString(), async () => {
-    //     const questions = await database.getQuestions([product_id])
-    //     const result = questionsConv(questions, product_id)
-    //     return result
-    //   })
-    //   if (questions.results.length > 0) {
-    //     res.status(200).send({
-    //       success: true,
-    //       successMsg: 'Grabbed questions',
-    //       data: questions
-    //     })
-    //   } else {
-    //   res.status(500).send({
-    //     success: true,
-    //     successMsg: 'Failed to grab questions'
-    //   })
-    // }
   })
 
   app.get('/qa/questions/:question_id/answers', async (req, res) => {
-    try {
       const question_id = Number(req.params.question_id);
-      const answers = await database.getAnswers([question_id])
-      res.status(200).send({
-        success: true,
-        successMsg: `Grabbed answers for question ${question_id}`,
-        data: answersConv(answers, question_id)
-      })
-    } catch (err) {
-      res.status(500).send({
-        success: false,
-        successMsg: 'Failed to grab answers',
-        error: err.message
-      })
-    }
-    // REDIS IMPLEMENTATION ======>
-    //   const question_id = Number(req.params.question_id);
-    //   // function that gets cached data or sets new cache
-    //   const answers = await getOrSetCache(question_id.toString(), async () => {
-    //     const answers = await database.getAnswers([question_id])
-    //     const result = answersConv(answers, question_id)
-    //     return result
-    //   })
-    //   if (answers.results.length > 0) {
-    //     res.status(200).send({
-    //       success: true,
-    //       successMsg: `Grabbed answers for question ${question_id}`,
-    //       data: answers
-    //     })
-    //   } else {
-    //   res.status(500).send({
-    //     success: false,
-    //     successMsg: 'Failed to grab answers'
-    //   })
-    // }
+      try {
+        const reply = await GET_ASYNC(`p-${question_id}`)
+        if (reply) {
+          console.log('using cached data')
+          res.status(200).send({
+            success: true,
+            successMsg: `Grabbed answers for question ${question_id}`,
+            data: JSON.parse(reply)
+          })
+        } else {
+          const answers = await database.getAnswers([question_id]);
+          const save = await SET_ASYNC(`p-${question_id}`, JSON.stringify(answers))
+          console.log('new key/value cached')
+          res.status(200).send({
+            success: true,
+            successMsg: `Grabbed answers for question ${question_id}`,
+            data: answers
+          })
+        }
+      } catch (err) {
+        res.send(err.message)
+      }
   })
 
   app.post('/qa/questions', async (req, res) => {
@@ -230,18 +197,5 @@ module.exports = (database) => {
       })
     }
   })
-
-  const getOrSetCache = (key, cb) => {
-    return new Promise((resolve, reject) => {
-      client.get(key, async (err, data) => {
-        if (err) return reject(err)
-        if (data !== null) return resolve(JSON.parse(data))
-        const freshData = await cb();
-        client.set(key, JSON.stringify(freshData))
-        resolve(freshData)
-      })
-    })
-  }
-
   return app;
 }
